@@ -1,5 +1,5 @@
 // const apiBaseURL = "http://localhost:5000/api/nouvelles";
-const apiBaseURL = "https://carnation-half-puppy.glitch.me/api/nouvelles";
+const apiBaseURL = "https://carnation-half-puppy.glitch.me.glitch.me/api/Nouvelles";
 
 // limit offset
 function HEAD(successCallBack, errorCallBack) {
