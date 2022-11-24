@@ -51,11 +51,12 @@ module.exports =
         async handleHttpResquest(req, res) {
             this.markRequestProcessStartTime();
             this.httpContext = await HttpContext.create(req, res);
-            this.showRequestInfo();
+            this.showShortRequestInfo();
             if (!(await this.middlewaresPipeline.handleHttpRequest(this.httpContext)))
                 this.httpContext.response.notFound();
-            this.showRequestProcessTime();
-            this.showMemoryUsage();
+            if (this.httpContext.req.method != "HEAD")
+                this.showRequestProcessTime();
+            //this.showMemoryUsage();
         }
         start() {
             this.httpServer.listen(this.port, () => { this.startupMessage() });
@@ -79,6 +80,13 @@ module.exports =
             log("Host ", this.httpContext.hostIp.substring(0, 15), "::", this.httpContext.host);
             if (this.httpContext.payload)
                 log("Request payload ", JSON.stringify(this.httpContext.payload).substring(0, 127) + "...");
+        }
+        showShortRequestInfo() {
+            if (this.httpContext.req.method != "HEAD") {
+                log(FgGreen, Bright, `Request --> [${this.httpContext.req.method}::${this.httpContext.req.url}]`);
+                if (this.httpContext.payload)
+                    log("Request payload ", JSON.stringify(this.httpContext.payload).substring(0, 127) + "...");
+            }
         }
         markRequestProcessStartTime() {
             this.requestProcessStartTime = process.hrtime();
