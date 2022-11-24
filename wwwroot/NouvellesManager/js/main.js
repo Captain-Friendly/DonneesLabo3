@@ -6,7 +6,8 @@ let currentETag = "";
 let previousScrollPosition = 0;
 
 let smtWEtag = false;
-const NewNews = 3;
+const FirstNews = 3;
+const NewNews = 1;
 let NbOfNews = 0;
 let currentCat = "";
 let scrollUpdated = false;
@@ -31,8 +32,15 @@ function partialRefresh(ETag){
 
 function prepareQueryString(offset){
     let queryString = "?";
+    let  news=0;
+    if(NbOfNews == 0){
+        news = FirstNews;
+    }
+    else{
+        news = NewNews
+    }
     if (offset != undefined){
-        queryString+=`&offset=${offset}&limit=${NewNews}`
+        queryString+=`&offset=${offset}&limit=${news}`
     }
     // queryString+="sort=Categorie&sort=Titre";
     queryString+="&sort=Date,desc";
@@ -55,7 +63,7 @@ function getNouvelleList(){
     // here where we decide the number of news
     if(NbOfNews == 0){
         GET_ALL(refreshNouvellesList , error, prepareQueryString(0));
-        NbOfNews+=NewNews;
+        NbOfNews+=FirstNews;
     }
     else
         GET_ALL(refreshNouvellesList , error, prepareQueryString(NbOfNews));
@@ -147,17 +155,18 @@ function AddNews(nouvelles, ETag){
     previousScrollPosition = $(".scrollContainer").scrollTop();
     if(nouvelles.length > 0){
         if(noNewNews == false) {
-            for(let i = 0; i < NewNews; i++){
+            if(NbOfNews == 0){
+                for(let i = 0; i < NewNews; i++){
             
-                // if(nouvelles[i].Categorie != currentCat)
-                //     currentCat = nouvelles[i].Categorie;
-                // else 
-                //     nouvelles[i].Categorie = "";
-        
-                insertIntoNouvellesList(nouvelles[i])
-                
+                    insertIntoNouvellesList(nouvelles[i])
+                    
+                }
+                NbOfNews += NewNews;
+            }else{
+                insertIntoNouvellesList(nouvelles[0])
+                NbOfNews += NewNews;
             }
-            NbOfNews += NewNews;
+            
         }else{
             if(ETag != currentETag){
                 $(".scrollContainer").scrollTop();

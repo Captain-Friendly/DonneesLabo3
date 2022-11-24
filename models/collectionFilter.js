@@ -180,6 +180,33 @@ module.exports =
         sort() {
             this.filteredCollection.sort((a, b) => this.compare(a, b));
         }
+        // get() {
+
+        //     this.findByKeys(this.keepFields());
+
+        //     if (this.sortFields.length > 0)
+        //         this.sort();
+
+        //         // (this.offset * this.limit, (this.offset + 1) * this.limit);
+            
+        //     if (this.limit != 0) {
+        //         let listWithoutBegining = this.filteredCollection.slice(this.offset);
+
+        //         let listWithoutEnd = [];
+        //         let length = 0;
+        //         if(listWithoutBegining.length >= this.limit)
+        //             length = this.limit;
+        //         else 
+        //             length  = listWithoutBegining.length
+                
+        //         for(let i = 0; i < length; i++)
+        //             listWithoutEnd.push(listWithoutBegining[i]);
+        //         let x = 0;
+        //         return listWithoutEnd;
+        //     }
+
+        //     return this.filteredCollection;
+        // }
         get() {
 
             this.findByKeys(this.keepFields());
@@ -187,22 +214,8 @@ module.exports =
             if (this.sortFields.length > 0)
                 this.sort();
 
-                // (this.offset * this.limit, (this.offset + 1) * this.limit);
-            
             if (this.limit != 0) {
-                let listWithoutBegining = this.filteredCollection.slice(this.offset);
-
-                let listWithoutEnd = [];
-                let length = 0;
-                if(listWithoutBegining.length >= this.limit)
-                    length = this.limit;
-                else 
-                    length  = listWithoutBegining.length
-                
-                for(let i = 0; i < length; i++)
-                    listWithoutEnd.push(listWithoutBegining[i]);
-                let x = 0;
-                return listWithoutEnd;
+                return this.filteredCollection.slice(this.offset * this.limit, (this.offset + 1) * this.limit);
             }
 
             return this.filteredCollection;
